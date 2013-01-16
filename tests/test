@@ -1,0 +1,17 @@
+#!/usr/bin/perl
+#
+# DESCRIPTION:
+#	Test sending basic passive results to tsar_server
+
+use strict;
+use TSARTest;
+
+my $data = [ 
+	["pkg1send to host"],
+	["like send to host"],
+	];
+	my $nsca = TSARTest->new( config => "basic" );
+	$nsca->start();
+	$nsca->send($data);
+	sleep 1;		# Need to wait for --daemon to finish processing
+	$nsca->stop;

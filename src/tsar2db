@@ -1,0 +1,102 @@
+#!/bin/sh
+#
+#*******************************************************************************
+#  Created 2010-03-15 by kongjian@taobao.com
+#
+#  tsar2db         This shell script takes care of starting and stopping
+#                  tsar2db  
+#
+# chkconfig: 2345 80 30
+# description: monitor is a  for a remote 
+#              running tsar2db on this host.
+# config: /etc/tsar2db/tsar2db.cfg   //tsar2db cfg file
+#
+#********************************************************************************
+
+# Source function library
+if [ -f /etc/init.d/functions ]; then
+  . /etc/init.d/functions
+elif [ -f /etc/rc.d/init.d/functions ] ; then
+  . /etc/rc.d/init.d/functions
+else
+  exit 0
+fi
+
+# Source networking configuration.
+. /etc/sysconfig/network
+# Check that networking is up.
+[ ${NETWORKING} = "no" ] && exit 0
+
+# This is our service name
+BASENAME=`basename $0`
+if [ -L $0 ]; then
+  BASENAME=`find $0 -name $BASENAME -printf %l`
+  BASENAME=`basename $BASENAME`
+fi
+file=`cat /etc/tsar2db/tsar2db.cfg|grep "^pid_file"|awk -F"=" '{print $2}'`
+
+RETVAL=0
+
+start() {
+ # Start daemons.
+  echo -n "Starting $BASENAME: "
+  pid=`ps -ef|grep '/etc/tsar2db/tsar_server' | grep -v 'grep'| awk '{print $2}'`
+  if echo $pid | grep -Eq '^-*[0-9]+$' ; then
+    echo 'tsar2db is running already!'
+    RETVAL=1
+  else
+    /etc/tsar2db/tsar_server > /dev/null 2>&1 &
+    RETVAL=$?
+  fi  
+    [ $RETVAL -eq 0 ] && echo_success
+    [ $RETVAL -ne 0 ] && echo_failure
+    echo
+    return $RETVAL
+}
+
+stop() {
+  # Stop daemons.
+  echo -n "Shutting down $BASENAME: "
+  pid=`ps -ef|grep '/etc/tsar2db/tsar_server' | grep -v 'grep'| awk '{print $2}'`
+  if echo $pid | grep -Eq '^-*[0-9]+$' ; then
+    kill -s TERM $pid
+    RETVAL=$?
+  else
+    echo 'tsar2db not running!'
+    RETVAL=1
+  fi  
+  [ $RETVAL -eq 0 ] && echo_success
+  [ $RETVAL -ne 0 ] && echo_failure
+  echo
+}
+
+restart() {
+  stop
+  start
+}
+
+rhstatus() {
+  echo -n "tsar2db"
+  status -p $file
+}
+
+# See how we were called.
+case "$1" in
+  start)
+    start
+    ;;
+  stop)
+    stop
+    ;;
+  restart)
+    restart
+    ;;
+  status)
+    rhstatus
+    ;;
+  *)
+    echo $"Usage: $BASENAME {start|stop|restart|status}"
+    exit 1
+esac
+
+exit $?
