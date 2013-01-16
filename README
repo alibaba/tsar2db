@@ -1,0 +1,12 @@
+tsar2db用来收集一个cdn节点内tsar的采集数据，存到mysql数据库，提供给其它应用查询
+数据保留最近3个月的，在tsar库中有如下表，各表字段含义和tsar采集定义相同
+从mysql的tsar库中可以看到整个cdn节点tsar采集到的数据
+
+配置tsar向tsar2db传送数据vi /etc/tsar/tsar.conf
+output_nagios_addr console2:56677
+将console2替换成console2的hostname output_nagios_addr console2.cn22:56677
+
+tsar2db编译依赖mysql-devel，运行依赖于httpd和mysql，其中httpd是用来提供cgi环境供查询
+比如：
+curl http://localhost:8082/cgi-bin/query.cgi?table=load
+
