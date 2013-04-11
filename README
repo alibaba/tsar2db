@@ -4,7 +4,7 @@ tsar2db用来收集一个cdn节点内tsar的采集数据，存到mysql数据库�
 
 配置tsar向tsar2db传送数据vi /etc/tsar/tsar.conf
 output_nagios_addr console2:56677
-将console2替换成console2的hostname
+将console2替换成tsar2db的hostname
 
 tsar2db编译依赖mysql-devel，运行依赖于httpd和mysql，其中httpd是用来提供cgi环境供查询
 比如：
