@@ -6,8 +6,13 @@ tsar2db用来收集一个cdn节点内tsar的采集数据，存到mysql数据库�
 output_nagios_addr console2:56677
 将console2替换成tsar2db的hostname
 
-tsar2db编译依赖mysql-devel，运行依赖于httpd和mysql，其中httpd是用来提供cgi环境供查询
-比如：
+tsar2db的编译依赖mysql-devel，运行依赖于httpd和mysql-server，其中httpd是用来提供cgi环境供查询
+mysql可以下载：
+mysql:http://vault.centos.org/5.3/updates/x86_64/RPMS/mysql-5.0.77-3.el5.x86_64.rpm
+mysql-devel:http://vault.centos.org/5.3/updates/x86_64/RPMS/mysql-devel-5.0.77-3.el5.x86_64.rpm
+mysql-server:http://vault.centos.org/5.3/updates/x86_64/RPMS/mysql-server-5.0.77-3.el5.x86_64.rpm
+
+查询时通过cgi接口指定时间和模块，查看具体数据，比如：
 [kongjian@console1 cdnlog]$ curl http://localhost:8082/query.cgi
 Error:miss table name.
 Table:load mem cpu tcp squid haproxy lvs switch traffic udp tcpx apache partition swap io pcsw 
