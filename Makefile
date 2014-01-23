@@ -27,6 +27,8 @@ send_nsca:
 
 install:
 	mkdir -p /etc/tsar2db
+	[[ ! -d /home/a/share/cgi-bin ]] && mkdir -p /home/a/share/cgi-bin
+	[[ ! -d /etc/httpd/conf/include ]] && mkdir -p /etc/httpd/conf/include
 	@echo ""
 	@echo "copy tsar2db file to system"
 	cp src/tsar_server /etc/tsar2db/
