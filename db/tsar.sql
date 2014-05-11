@@ -11,6 +11,7 @@ CREATE TABLE IF NOT EXISTS `cpu_1` (
 		`nice`	decimal(8,2),
 		`steal`	decimal(8,2),
 		`guest`	decimal(8,2),
+		`ncpu`	decimal(8,2),
 		`view_time` timestamp default current_timestamp,
 		PRIMARY KEY(`view_time`,`host_name`)
 		) ENGINE=MyISAM COMMENT='cpu mod info';
@@ -28,6 +29,7 @@ CREATE TABLE IF NOT EXISTS `cpu_2` (
 		`nice`	decimal(8,2),
 		`steal`	decimal(8,2),
 		`guest`	decimal(8,2),
+		`ncpu`	decimal(8,2),
 		`view_time` timestamp default current_timestamp,
 		PRIMARY KEY(`view_time`,`host_name`)
 		) ENGINE=MyISAM COMMENT='cpu mod info';
@@ -44,6 +46,7 @@ CREATE TABLE IF NOT EXISTS `cpu` (
 		`nice`  decimal(8,2),
 		`steal` decimal(8,2),
 		`guest` decimal(8,2),
+		`ncpu`	decimal(8,2),
 		`view_time` timestamp default current_timestamp,
 		PRIMARY KEY(`view_time`,`host_name`)
 		) ENGINE=MERGE UNION=(cpu_1,cpu_2) INSERT_METHOD=LAST;
